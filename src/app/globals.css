@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; }
+
+body {
+  background: #0F0F0F;
+  color: #e2e8f0;
+  font-family: Inter, system-ui, sans-serif;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition-all active:scale-95;
+  }
+  .btn-outline {
+    @apply border border-[#333] hover:border-blue-500 text-slate-300 hover:text-white font-semibold px-6 py-3 rounded-xl transition-all;
+  }
+  .card {
+    @apply bg-obsidian border border-[#333] rounded-2xl;
+  }
+}
