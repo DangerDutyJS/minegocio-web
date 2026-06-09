@@ -1,19 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function ComprarPage() {
+function ComprarForm() {
+  const searchParams = useSearchParams();
   const [hardwareId, setHardwareId] = useState("");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    const hwid = searchParams.get("hwid") ?? "";
+    if (hwid) setHardwareId(hwid.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 16));
+  }, [searchParams]);
+
+  const hwidCompleto = hardwareId.length === 16;
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    if (hardwareId.length !== 16) {
+    if (!hwidCompleto) {
       setError("El ID de equipo debe tener exactamente 16 caracteres.");
       return;
     }
@@ -57,19 +66,29 @@ export default function ComprarPage() {
               <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
                 ID de tu equipo
               </label>
-              <input
-                type="text"
-                value={hardwareId}
-                onChange={(e) => setHardwareId(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
-                maxLength={16}
-                placeholder="A1B2C3D4E5F6G7H8"
-                className="w-full bg-onyx border border-[#333] focus:border-blue-500 rounded-xl px-4 py-3 text-white font-mono text-base outline-none transition-colors placeholder:text-slate-700"
-                autoComplete="off"
-                spellCheck={false}
-              />
-              <p className="text-slate-600 text-xs mt-1.5">
-                Lo ves en la app → pantalla de activación → "ID de equipo"
-              </p>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={hardwareId}
+                  onChange={(e) => setHardwareId(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ""))}
+                  maxLength={16}
+                  placeholder="A1B2C3D4E5F6G7H8"
+                  className={`w-full bg-onyx border rounded-xl px-4 py-3 text-white font-mono text-base outline-none transition-colors placeholder:text-slate-700 pr-10
+                    ${hwidCompleto ? "border-green-600" : "border-[#333] focus:border-blue-500"}`}
+                  autoComplete="off"
+                  spellCheck={false}
+                />
+                {hwidCompleto && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-lg">✓</span>
+                )}
+              </div>
+              {hwidCompleto ? (
+                <p className="text-green-600 text-xs mt-1.5">ID detectado correctamente</p>
+              ) : (
+                <p className="text-slate-600 text-xs mt-1.5">
+                  Lo ves en la app → pantalla de activación → "ID de equipo"
+                </p>
+              )}
             </div>
 
             <div>
@@ -122,5 +141,13 @@ export default function ComprarPage() {
         </p>
       </div>
     </main>
+  );
+}
+
+export default function ComprarPage() {
+  return (
+    <Suspense>
+      <ComprarForm />
+    </Suspense>
   );
 }
