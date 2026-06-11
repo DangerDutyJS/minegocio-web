@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 const DOWNLOAD_URL =
-  "https://github.com/DangerDutyJS/minegocio/releases/latest/download/MiNegocio-Setup-10.0.0.exe";
+  "https://github.com/DangerDutyJS/minegocio/releases/download/v11.1.0/MiNegocio-Setup-11.1.0.exe";
 
 const perks = [
   "Todos los módulos incluidos",

@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const DOWNLOAD_URL =
-  "https://github.com/DangerDutyJS/minegocio/releases/latest/download/MiNegocio-Setup-10.0.0.exe";
+  "https://github.com/DangerDutyJS/minegocio/releases/download/v11.1.0/MiNegocio-Setup-11.1.0.exe";
 
 const features = [
   { n: "01", title: "Punto de venta", desc: "Registra ventas rápido, aplica descuentos y maneja múltiples métodos de pago." },
