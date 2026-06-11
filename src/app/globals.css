@@ -4,20 +4,181 @@
 
 * { box-sizing: border-box; }
 
+:root {
+  --gold: #C8911A;
+  --gold-light: #E8AE30;
+  --warm: #EDE8DF;
+  --warm-muted: #7A7068;
+  --warm-dim: #3A342C;
+  --surface: #181410;
+  --surface-alt: #0F0D0A;
+  --surface-border: #252018;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: #0F0F0F;
-  color: #e2e8f0;
-  font-family: Inter, system-ui, sans-serif;
+  background: #0D0B08;
+  color: var(--warm);
+  font-family: var(--font-outfit), system-ui, sans-serif;
+}
+
+/* Film grain overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23g)'/%3E%3C/svg%3E");
+  opacity: 0.038;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* Entrance animation */
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-enter {
+  animation: enter 0.75s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Editorial feature grid */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1023px) {
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 639px) {
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-grid > * {
+  border-right: 1px solid var(--surface-border);
+  border-bottom: 1px solid var(--surface-border);
+  transition: background-color 0.2s ease;
+}
+
+.feature-grid > *:hover {
+  background-color: rgba(200, 145, 26, 0.04);
+}
+
+/* 4-col: remove right border on every 4th */
+@media (min-width: 1024px) {
+  .feature-grid > *:nth-child(4n) {
+    border-right: none;
+  }
+  .feature-grid > *:nth-child(n+5) {
+    border-bottom: none;
+  }
+}
+
+/* 2-col: remove right border on every 2nd */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .feature-grid > *:nth-child(2n) {
+    border-right: none;
+  }
+  .feature-grid > *:nth-child(n+7) {
+    border-bottom: none;
+  }
+}
+
+/* 1-col: remove right border on all */
+@media (max-width: 639px) {
+  .feature-grid > * {
+    border-right: none;
+  }
+  .feature-grid > *:last-child {
+    border-bottom: none;
+  }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-500 text-white font-semibold px-6 py-3 rounded-xl transition-all active:scale-95;
+    @apply inline-flex items-center justify-center font-semibold px-7 py-3.5 rounded-xl transition-all active:scale-95 text-sm tracking-wide;
+    background: var(--gold);
+    color: #0D0B08;
   }
+  .btn-primary:hover {
+    background: var(--gold-light);
+  }
+
   .btn-outline {
-    @apply border border-[#333] hover:border-blue-500 text-slate-300 hover:text-white font-semibold px-6 py-3 rounded-xl transition-all;
+    @apply inline-flex items-center justify-center font-semibold px-7 py-3.5 rounded-xl border text-sm transition-all tracking-wide;
+    border-color: var(--surface-border);
+    color: var(--warm-muted);
   }
+  .btn-outline:hover {
+    border-color: rgba(200, 145, 26, 0.4);
+    color: var(--warm);
+  }
+
   .card {
-    @apply bg-obsidian border border-[#333] rounded-2xl;
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    @apply rounded-2xl;
+  }
+
+  .badge-gold {
+    @apply inline-flex items-center text-xs font-semibold px-3.5 py-1.5 rounded-full tracking-wide;
+    background: rgba(200, 145, 26, 0.10);
+    border: 1px solid rgba(200, 145, 26, 0.22);
+    color: var(--gold);
+  }
+
+  .nav-glass {
+    background: rgba(13, 11, 8, 0.88);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--surface-border);
+  }
+
+  .price-card {
+    background: var(--surface);
+    border: 1px solid var(--surface-border);
+    @apply rounded-2xl;
+  }
+
+  .section-rule {
+    border-color: var(--surface-border);
+  }
+
+  .input-field {
+    @apply w-full rounded-xl px-4 py-3.5 text-base outline-none transition-all;
+    background: #0D0B08;
+    border: 1px solid var(--surface-border);
+    color: var(--warm);
+  }
+  .input-field::placeholder {
+    color: var(--warm-dim);
+  }
+  .input-field:focus {
+    border-color: rgba(200, 145, 26, 0.45);
+    box-shadow: 0 0 0 3px rgba(200, 145, 26, 0.07);
+  }
+  .input-field-valid {
+    border-color: rgba(74, 222, 128, 0.45) !important;
+  }
+
+  .field-label {
+    @apply block text-xs font-semibold uppercase tracking-widest mb-2.5;
+    color: var(--warm-dim);
   }
 }
